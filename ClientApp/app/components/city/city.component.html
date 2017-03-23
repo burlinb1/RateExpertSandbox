@@ -1,0 +1,18 @@
+﻿<h1>Cities</h1>
+
+<p *ngIf="!cities"><em>Loading...</em></p>
+
+<table class='table' *ngIf="cities">
+   <thead>
+      <tr>
+         <th>Id</th>
+         <th>Name</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr *ngFor="let city of cities">
+         <td>{{ city.id }}</td>
+         <td>{{ city.name }}</td>
+      </tr>
+   </tbody>
+</table>

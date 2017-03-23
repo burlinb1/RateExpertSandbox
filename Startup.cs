@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.Webpack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using RateExpert.Database;
 using Swashbuckle.AspNetCore.Swagger;
+using System.IO;
 
 namespace RateExpert
 {
@@ -27,6 +30,26 @@ namespace RateExpert
         {
             // Add framework services.
             services.AddMvc();
+            services.AddLogging();
+
+            // Register configuration service...
+            services.Add(new ServiceDescriptor(typeof(IConfiguration),
+                     provider => new ConfigurationBuilder()
+                                    .SetBasePath(Directory.GetCurrentDirectory())
+                                    .AddJsonFile("appsettings.json",
+                                                 optional: false,
+                                                 reloadOnChange: true)
+                                    .Build(),
+                     ServiceLifetime.Singleton));
+
+            var connectionString = Configuration.GetConnectionString("LogiTex");
+
+            services
+                .AddDbContext<CityContext>(options => options.UseSqlServer(connectionString));
+
+            // Dependency injection mappings...
+            services
+                .AddScoped<ICityRepository, CityRepository>();
 
             // Register the Swagger generator, defining one or more Swagger documents
             services.AddSwaggerGen(c =>
