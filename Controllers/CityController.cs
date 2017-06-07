@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RateExpert.Database;
 
-
 namespace RateExpert.Controllers
 {
     [Route("api/[controller]")]
